@@ -1,7 +1,15 @@
 #!/bin/bash
 
-if [ ! -f /data/biothings/APP_NAME/src/bin/ssh_host_key ]; then
-    ssh-keygen -f /data/biothings/APP_NAME/src/bin/ssh_host_key -N ""
+# create symlink to persistent, unique, SSH Key
+# if [ ! -L /home/biothings/APP_NAME/src/bin/ssh_host_key ]
+# then
+#     rm -f /home/biothings/APP_NAME/src/bin/ssh_host_key{,.pub}
+#     ln -s /data/biothings/ssh_host_key /home/biothings/APP_NAME/src/bin/ssh_host_key
+#     ln -s /data/biothings/ssh_host_key.pub /home/biothings/APP_NAME/src/bin/ssh_host_key.pub
+# fi
+
+if [ ! -f /data/biothings/ssh_host_key ]; then
+    ssh-keygen -f /data/biothings/ssh_host_key -N ""
 fi
 
 parse_schema() {
@@ -49,7 +57,7 @@ DATA_TARGET_SERVER_PASSWORD=$(parse_password $TARGET_URI)
 hub_schema=$(parse_schema $HUB_URI)
 
 
-cat > /data/biothings/APP_NAME/src/config.py << EOF
+cat > /tmp/config.py << EOF
 # DO NOT EDIT THIS CONFIG DIRECTLY
 # INSTEAD, SET THE PROPER ENVIRONMENT VARIABLES
 # AND THIS CONFIG WILL BE UPDATED AUTOMATICALLY ON CONTAINER STARTUP
@@ -437,6 +445,19 @@ CACHE_FOLDER = "/data/biothings/APP_NAME/cache"
 RUN_DIR = '/data/biothings/APP_NAME/run'
 CONFIG_READONLY = False
 
+# FIXME: deal with the version issue
+# At least for BIOTHINGS_VERSION, it is trying to use the git repo version
+# which does not seem to make sense
+BIOTHINGS_VERSION = 'fixme'
+
 EOF
 
-exec python /data/biothings/APP_NAME/src/bin/hub.py
+if [ -f /data/biothings/APP_NAME/config.py ]
+then
+    rm -f /home/biothings/APP_NAME/src/config.py
+    ln -s /data/biothings/APP_NAME/config.py /home/biothings/APP_NAME/src/config.py
+else
+    mv /tmp/config.py /home/biothings/APP_NAME/src/config.py
+fi
+
+exec python /home/biothings/APP_NAME/src/bin/hub.py

@@ -17,14 +17,12 @@ services:
     image: lmenezes/cerebro:latest
     ports:
       - 9000:9000  # 9000 default, it was like this before as well
-  webapp:
-    image: biothings/biothings-webapp:master
+  studio:
+    image: biothings/biothings-studio:master
     ports:
       - "8080:80"
   biothings:
-    image: biothings/biothings-standalone-hub:master
-    environment: 
-      - SRC_URI=mongodb://username:psword@hostname:12345
+    image: biothings/biothings-hub:master
     ports:
       - "7022:7022"
       - "7080:7080"

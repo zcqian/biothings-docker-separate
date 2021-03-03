@@ -9,6 +9,7 @@ ARG BIOTHINGS_GID=454
 ARG BIOTHINGS_GIT=https://github.com/biothings/biothings.api.git
 # VERSION can be a version from PyPI or a git tag/revision/branch
 ARG BIOTHINGS_VERSION=master
+ARG BIOTHINGS_EXTRA_REQUIRES=hub,web_extra
 
 # create biothings user, run as the user 
 RUN groupadd -g ${BIOTHINGS_GID} -r biothings \
@@ -22,10 +23,12 @@ RUN python3 -m venv venv
 # activate
 ENV VIRTUAL_ENV=/home/biothings/venv
 ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
+# update pip
+RUN pip install --upgrade pip
 # if we can't find the version from pypi then try git
 RUN CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
-    pip install biothings[hub]==${BIOTHINGS_VERSION} \
+    pip install biothings[${BIOTHINGS_EXTRA_REQUIRES}]==${BIOTHINGS_VERSION} \
     || CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
-    pip install "git+${BIOTHINGS_GIT}@${BIOTHINGS_VERSION}#egg=biothings[hub]"
+    pip install "git+${BIOTHINGS_GIT}@${BIOTHINGS_VERSION}#egg=biothings[${BIOTHINGS_EXTRA_REQUIRES}]"
 
 CMD [ "/home/biothings/venv/bin/python" ]

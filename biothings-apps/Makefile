@@ -49,11 +49,13 @@ biothings-mygeneset:
 		--build-arg APP_TAG=${APP_GIT_TAG} \
 		-t biothings-mygeneset:${APP_GIT_TAG} .
 
+.PHONY: purge all
 purge:
 	docker rmi \
-		iothings-standalone-hub:${APP_GIT_TAG} \
+		biothings-standalone-hub:${APP_GIT_TAG} \
 		biothings-mygene:${APP_GIT_TAG} \
 		biothings-mychem:${APP_GIT_TAG} \
 		biothings-myvariant:${APP_GIT_TAG} \
 		biothings-mydisease:${APP_GIT_TAG} \
 		biothings-mygeneset:${APP_GIT_TAG} \
+all: biothings-standalone-hub biothings-mygene biothings-mychem
