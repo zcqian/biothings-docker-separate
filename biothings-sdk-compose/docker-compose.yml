@@ -22,7 +22,7 @@ services:
     ports:
       - "8080:80"
   biothings:
-    image: biothings/biothings-hub:master
+    image: biothings-mychem:master
     ports:
       - "7022:7022"
       - "7080:7080"

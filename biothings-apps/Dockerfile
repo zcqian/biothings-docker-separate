@@ -28,12 +28,16 @@ RUN chown -R biothings:biothings /data/biothings
 # export persistent data
 VOLUME [ "/data" ]
 
-COPY docker-entrypoint.sh /
+ADD docker-entrypoint.sh /
 RUN sed -i s/APP_NAME/${APP_NAME}/g /docker-entrypoint.sh
+
 
 USER biothings
 WORKDIR /home/biothings/${APP_NAME}/src
 ENV PYTHONPATH=.
+
+ADD config.py .
+RUN sed -i s/API_NAME/${APP_NAME}/g config.py
 
 # will fix later
 # It is better to send a interrupt than a sigkill
