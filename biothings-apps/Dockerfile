@@ -37,7 +37,7 @@ WORKDIR /home/biothings/${APP_NAME}/src
 ENV PYTHONPATH=.
 
 ADD config.py .
-RUN sed -i s/API_NAME/${APP_NAME}/g config.py
+RUN sed -i s/__REPLACE_WITH_API_NAME/${APP_NAME}/g config.py
 
 # will fix later
 # It is better to send a interrupt than a sigkill
@@ -47,4 +47,4 @@ STOPSIGNAL SIGINT
 EXPOSE 7080/tcp
 EXPOSE 7022/tcp
 
-CMD ["/docker-entrypoint.sh"]
+CMD ["/home/biothings/venv/bin/python", "/home/biothings/${APP_NAME}/src/bin/hub.py"]

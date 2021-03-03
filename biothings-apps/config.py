@@ -5,19 +5,45 @@ import urllib.parse
 src_parsed = urllib.parse.urlparse(os.environ.get('SRC_URI'))
 target_parsed = urllib.parse.urlparse(os.environ.get('TARGET_URI'))
 hub_parsed = urllib.parse.urlparse(os.environ.get('HUB_URI'))
+api_name = "__REPLACE_WITH_API_NAME"
 
-DATA_ARCHIVE_ROOT = '/data/biothings/API_NAME/datasources'
-DATA_PLUGIN_FOLDER = '/data/biothings/API_NAME/plugins'
-DATA_UPLOAD_FOLDER = '/data/biothings/API_NAME/dataupload'
+if not os.path.isfile('/data/biothings/ssh_host_key'):
+	if os.path.exists('/data/biothings/ssh_host_key'):
+		raise FileExistsError("/data/biothings/ssh_host_key exists but is not a regular file")
+	
+	from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey as pk
+	from cryptography.hazmat.primitives import serialization as crypto_ser
 
-DIFF_PATH = "/data/biothings/API_NAME/diff"
-RELEASE_PATH = "/data/biothings/API_NAME/release"
-CACHE_FOLDER = "/data/biothings/API_NAME/cache"
+	print("Generating SSH Keys for BioThings Hub...")
+	privkey = pk.generate()
+	with open('/data/biothings/ssh_host_key', 'wb') as f:
+		f.write(
+			privkey.private_bytes(
+				crypto_ser.Encoding.PEM, 
+				crypto_ser.PrivateFormat.PKCS8, 
+				crypto_ser.NoEncryption()
+			)
+		)
+	pubkey = privkey.public_key().public_bytes(crypto_ser.Encoding.OpenSSH, crypto_ser.PublicFormat.OpenSSH)
+	with open('/data/biothings/ssh_host_key.pub', 'wb') as f:
+		f.write(pubkey)
+	print("SSH Key has been generated, Public Key:\n")
+	print(pubkey.decode('ASCII'))
+	print()
+	del privkey, pubkey, crypto_ser, pk
 
-LOG_FOLDER = "/data/biothings/API_NAME/logs"
+DATA_ARCHIVE_ROOT = f'/data/biothings/{api_name}/datasources'
+DATA_PLUGIN_FOLDER = f'/data/biothings/{api_name}/plugins'
+DATA_UPLOAD_FOLDER = f'/data/biothings/{api_name}/dataupload'
+
+DIFF_PATH = f"/data/biothings/{api_name}/diff"
+RELEASE_PATH = f"/data/biothings/{api_name}/release"
+CACHE_FOLDER = f"/data/biothings/{api_name}/cache"
+
+LOG_FOLDER = f"/data/biothings/{api_name}/logs"
 logger = setup_default_log("hub", LOG_FOLDER)
 
-RUN_DIR = '/data/biothings/API_NAME/run'
+RUN_DIR = f'/data/biothings/{api_name}/run'
 
 DATA_SRC_SERVER = src_parsed.hostname or 'localhost'
 DATA_SRC_PORT = src_parsed.port or 27017
@@ -51,11 +77,12 @@ HUB_SSH_PORT = 7022
 HUB_API_PORT = 7080
 
 # Hub name/icon url/version, for display purpose
-HUB_NAME = "Studio for API_NAME"
-HUB_ICON = "http://biothings.io/static/img/API_NAME-logo-shiny.svg"
+HUB_NAME = f"Studio for {api_name}"
+if api_name in ('mychem.info', 'myvariant.info', 'mygene.info'):
+	HUB_ICON = f"http://biothings.io/static/img/{api_name.rstrip('.info')}-logo-shiny.svg"
 HUB_VERSION = "master"
 
 USE_RELOADER = True # so no need to restart hub when a datasource has changed
 
 # cleanup config namespace
-del os, urllib, src_parsed, target_parsed, hub_parsed
+del os, urllib, src_parsed, target_parsed, hub_parsed, api_name

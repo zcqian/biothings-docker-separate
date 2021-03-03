@@ -25,10 +25,10 @@ ENV VIRTUAL_ENV=/home/biothings/venv
 ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
 # update pip
 RUN pip install --upgrade pip
+# install cryptography, 1) we need this to generate SSH keys 2) install w/o Rust
+RUN CRYPTOGRAPHY_DONT_BUILD_RUST=1 pip install cryptography
 # if we can't find the version from pypi then try git
-RUN CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
-    pip install biothings[${BIOTHINGS_EXTRA_REQUIRES}]==${BIOTHINGS_VERSION} \
-    || CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
-    pip install "git+${BIOTHINGS_GIT}@${BIOTHINGS_VERSION}#egg=biothings[${BIOTHINGS_EXTRA_REQUIRES}]"
+RUN pip install biothings[${BIOTHINGS_EXTRA_REQUIRES}]==${BIOTHINGS_VERSION} \
+    || pip install "git+${BIOTHINGS_GIT}@${BIOTHINGS_VERSION}#egg=biothings[${BIOTHINGS_EXTRA_REQUIRES}]"
 
 CMD [ "/home/biothings/venv/bin/python" ]
