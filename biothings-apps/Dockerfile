@@ -9,6 +9,7 @@ ENV TARGET_URI=mongodb://mongodb:27017
 ENV TARGET_DB=biothings_target
 ENV HUB_URI=mongodb://mongodb:27017
 ENV HUB_DB=biothings_hub
+ENV API_NAME ${APP_NAME}
 
 RUN mkdir -p /home/biothings/${APP_NAME}
 WORKDIR /home/biothings/${APP_NAME}
@@ -28,9 +29,6 @@ RUN chown -R biothings:biothings /data/biothings
 # export persistent data
 VOLUME [ "/data" ]
 
-ADD docker-entrypoint.sh /
-RUN sed -i s/APP_NAME/${APP_NAME}/g /docker-entrypoint.sh
-
 
 USER biothings
 WORKDIR /home/biothings/${APP_NAME}/src
@@ -48,3 +46,4 @@ EXPOSE 7080/tcp
 EXPOSE 7022/tcp
 
 CMD ["/home/biothings/venv/bin/python", "/home/biothings/${APP_NAME}/src/bin/hub.py"]
+
