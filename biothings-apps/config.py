@@ -1,4 +1,5 @@
 from config_hub import *
+from biothings.utils.loggers import setup_default_log
 import os
 import urllib.parse
 
@@ -85,4 +86,4 @@ HUB_VERSION = "master"
 USE_RELOADER = True # so no need to restart hub when a datasource has changed
 
 # cleanup config namespace
-del os, urllib, src_parsed, target_parsed, hub_parsed, api_name
+del os, urllib, src_parsed, target_parsed, hub_parsed, api_name, setup_default_log
