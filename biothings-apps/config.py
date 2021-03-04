@@ -85,5 +85,7 @@ HUB_VERSION = "master"
 
 USE_RELOADER = True # so no need to restart hub when a datasource has changed
 
+MAX_QUEUED_JOBS = 1
+
 # cleanup config namespace
 del os, urllib, src_parsed, target_parsed, hub_parsed, api_name, setup_default_log
