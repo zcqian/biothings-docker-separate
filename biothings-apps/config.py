@@ -12,16 +12,16 @@ if not os.path.isfile('/data/biothings/ssh_host_key'):
 	if os.path.exists('/data/biothings/ssh_host_key'):
 		raise FileExistsError("/data/biothings/ssh_host_key exists but is not a regular file")
 	
-	from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey as pk
+	from cryptography.hazmat.primitives.asymmetric import rsa as pk
 	from cryptography.hazmat.primitives import serialization as crypto_ser
 
 	print("Generating SSH Keys for BioThings Hub...")
-	privkey = pk.generate()
+	privkey = pk.generate_private_key(65537, 2048)
 	with open('/data/biothings/ssh_host_key', 'wb') as f:
 		f.write(
 			privkey.private_bytes(
 				crypto_ser.Encoding.PEM, 
-				crypto_ser.PrivateFormat.PKCS8, 
+				crypto_ser.PrivateFormat.OpenSSH, 
 				crypto_ser.NoEncryption()
 			)
 		)
