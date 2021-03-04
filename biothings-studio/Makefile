@@ -4,6 +4,6 @@ GIT_TAG ?= master
 biothings-studio:
 	docker build \
 		--build-arg GIT_TAG=${GIT_TAG} \
-		--tag biothings-webapp:${GIT_TAG} .
+		--tag biothings-studio:${GIT_TAG} .
 
 all: biothings-studio
