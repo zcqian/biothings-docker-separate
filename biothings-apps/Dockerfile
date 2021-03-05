@@ -9,6 +9,10 @@ ENV TARGET_URI=mongodb://mongodb:27017
 ENV TARGET_DB=biothings_target
 ENV HUB_URI=mongodb://mongodb:27017
 ENV HUB_DB=biothings_hub
+ARG TINI_VERSION=v0.19.0
+
+
+
 
 RUN mkdir -p /home/biothings/api
 WORKDIR /home/biothings/api
@@ -21,6 +25,8 @@ RUN ln -sv /data/biothings/ssh_host_key.pub src/bin/ssh_host_key.pub
 
 # create dirs
 USER root
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
 RUN mkdir /data
 RUN ["/bin/bash", "-c", "mkdir -p /data/biothings/${API_NAME}/{datasources,plugins,dataupload,diff,logs,release,cache,run}"]
 # fix permissions
@@ -45,5 +51,6 @@ STOPSIGNAL SIGINT
 EXPOSE 7080/tcp
 EXPOSE 7022/tcp
 
+ENTRYPOINT ["/tini", "--"]
 CMD ["/home/biothings/venv/bin/python", "/home/biothings/api/src/bin/hub.py"]
 

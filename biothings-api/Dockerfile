@@ -1,4 +1,5 @@
-FROM python:3.6
+ARG PYTHON_VERSION=3.6
+FROM python:${PYTHON_VERSION}
 
 # UID and GID chosen arbitrarily -- it is better to choose a specific GID/UID
 # but I have no idea how this won't collide with other things
