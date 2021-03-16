@@ -1,10 +1,10 @@
-ARG BIOTHINGS_VERSION
+ARG BIOTHINGS_VERSION=0.8.1
 
 FROM biothings:${BIOTHINGS_VERSION}
 
-ARG APP_GIT=https://github.com/biothings/biothings_studio.git
-ARG APP_TAG=master
-ARG API_NAME=biothings-hub
+ARG APP_GIT=https://github.com/outbreak-info/outbreak.api.git
+ARG APP_TAG=afad55345d92031d36e5521f3b27d6ed12ffbb46
+ARG API_NAME=outbreak-hub
 ENV SRC_URI=mongodb://mongodb:27017
 ENV SRC_DB=biothings_src
 ENV TARGET_URI=mongodb://mongodb:27017
@@ -16,10 +16,11 @@ ARG TINI_VERSION=v0.19.0
 
 
 
-RUN mkdir -p /home/biothings/api
-WORKDIR /home/biothings/api
+RUN mkdir -p /home/biothings/api/src
+WORKDIR /home/biothings/api/src
 RUN git clone ${APP_GIT} . && git checkout ${APP_TAG}
 RUN find . -maxdepth 1 -name 'requirements*.txt' -exec pip install -r {} \;
+WORKDIR /home/biothings/api
 # Remove existing ssh keys
 RUN rm -f src/bin/ssh_host_key \
     && rm -f src/bin/ssh_host_key.pub \

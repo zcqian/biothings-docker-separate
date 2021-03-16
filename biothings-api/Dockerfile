@@ -1,5 +1,7 @@
-ARG PYTHON_VERSION=3.6
+ARG PYTHON_VERSION=3.7
 FROM python:${PYTHON_VERSION}
+
+# FIXME: use external pip and cache (for build speed and smaller container)
 
 # UID and GID chosen arbitrarily -- it is better to choose a specific GID/UID
 # but I have no idea how this won't collide with other things

@@ -1,4 +1,5 @@
 APP_GIT_TAG ?= master
+BIOTHINGS_VERSION ?= 0.9.1
 
 biothings-hub:
 	docker build \
@@ -25,5 +26,14 @@ biothings-myvariant:
 	docker build \
 		--build-arg API_NAME=myvariant.info \
 		--build-arg APP_GIT="https://github.com/biothings/myvariant.info.git" \
+		--build-arg APP_TAG=${APP_GIT_TAG} \
+		-t myvariant-hub:${APP_GIT_TAG} .
+
+
+outbreak:
+	docker build \
+		--build-arg API_NAME=mydisease.info \
+		--build-arg BIOTHINGS_VERSION=${BIOTHINGS_VERSION} \
+		--build-arg APP_GIT="https://github.com/biothings/mydisease.info.git" \
 		--build-arg APP_TAG=${APP_GIT_TAG} \
 		-t myvariant-hub:${APP_GIT_TAG} .
