@@ -1,6 +1,12 @@
 # Docker Images for BioThings
 This repository contains Dockerfiles necessary to produce Docker images for BioThings.
 
+## Running a MyGeneset Hub
+With docker installed, first run `make` in the `biothings-api` directory to build the base image, then run `make mygeneset-hub` in the `biothings-apps` directory, then `make` in the `biothings-studio` directory to build the current web app.
+
+Then, switch to the `biothings-sdk-compose` directory and run `docker-compose -f docker-compose.mygeneset.yml up` to start all the containers. Then you can access the current web-app at http://localhost:8080 and the hub will be listening on http://localhost:7080 .
+
+
 ## Using the SDK
 To get started using the SDK, you need to have Docker and Docker Compose set up. Then, go to the `biothings-sdk-compose` directory and run `docker-compose up` launch the SDK.
 

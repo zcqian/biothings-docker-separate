@@ -1,0 +1,24 @@
+services:
+  mongodb:
+    image: mongo:4.0
+    ports:
+      - "27017:27017"
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.14
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+  biothings:
+    image: mygeneset-hub:master
+    ports:
+      - "7022:7022"
+      - "7080:7080"
+    volumes: 
+      - data:/data
+  studio:
+    image: biothings-studio:master
+    ports:
+      - "8080:80"
+volumes: 
+  data:
