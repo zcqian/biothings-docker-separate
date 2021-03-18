@@ -1,4 +1,7 @@
-ARG PYTHON_VERSION=3.7
+ARG PYTHON_VERSION=3.6
+# FIXME: as I was saying ... 3.7 doesn't break my stuff
+#  but it breaks dependencies like asyncssh now that async is a reserved keyword
+
 FROM python:${PYTHON_VERSION}
 
 # FIXME: use external pip and cache (for build speed and smaller container)

@@ -31,7 +31,7 @@ USER root
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 RUN chmod +x /tini
 RUN mkdir /data
-RUN ["/bin/bash", "-c", "mkdir -p /data/biothings/${API_NAME}/{datasources,plugins,dataupload,diff,logs,release,cache,run}"]
+RUN ["/bin/bash", "-c", "mkdir -p /data/biothings/${API_NAME}/{datasources,plugins,dataupload,diff,logs,release,cache,run,esbackup}"]
 # fix permissions
 RUN chown -R biothings:biothings /data/biothings
 

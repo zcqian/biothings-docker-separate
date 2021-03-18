@@ -40,6 +40,7 @@ DATA_UPLOAD_FOLDER = f'/data/biothings/{api_name}/dataupload'
 DIFF_PATH = f"/data/biothings/{api_name}/diff"
 RELEASE_PATH = f"/data/biothings/{api_name}/release"
 CACHE_FOLDER = f"/data/biothings/{api_name}/cache"
+ES_BACKUPS_FOLDER = f"/data/biothings/{api_name}/esbackup"
 
 LOG_FOLDER = f"/data/biothings/{api_name}/logs"
 logger = setup_default_log("hub", LOG_FOLDER)

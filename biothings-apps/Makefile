@@ -8,6 +8,14 @@ biothings-hub:
 		--build-arg APP_TAG=${APP_GIT_TAG} \
 		-t vanilla-hub:${APP_GIT_TAG} .
 
+mygeneset-hub: Dockerfile
+	docker build \
+		--build-arg BIOTHINGS_VERSION=${BIOTHINGS_VERSION} \
+		--build-arg API_NAME=mygeneset.info \
+		--build-arg APP_GIT="https://github.com/biothings/mygeneset.info" \
+		--build-arg APP_TAG=${APP_GIT_TAG} \
+		-t $@:${APP_GIT_TAG} .
+
 biothings-mygene:
 	docker build \
 		--build-arg API_NAME=mygene.info \
