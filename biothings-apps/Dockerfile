@@ -28,8 +28,8 @@ RUN rm -f src/bin/ssh_host_key \
 
 # create dirs
 USER root
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-RUN chmod +x /tini
+ADD docker-entrypoint.sh /
+
 RUN mkdir /data
 RUN ["/bin/bash", "-c", "mkdir -p /data/biothings/${API_NAME}/{datasources,plugins,dataupload,diff,logs,release,cache,run,esbackup}"]
 # fix permissions
@@ -54,6 +54,6 @@ STOPSIGNAL SIGINT
 EXPOSE 7080/tcp
 EXPOSE 7022/tcp
 
-ENTRYPOINT ["/tini", "--"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/home/biothings/venv/bin/python", "/home/biothings/api/src/bin/hub.py"]
 
